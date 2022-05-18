@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+
 
 class SearchProblem:
     """
@@ -70,7 +71,8 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem):
     """
@@ -87,17 +89,106 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    # initializing frontier as a Stack for dfs
+    frontier = util.Stack()
+
+    frontier.push((problem.getStartState(), []))
+    explored = []
+
+    # choosing a node from frontier
+    while not frontier.isEmpty():
+        (
+            node,
+            path,
+        ) = frontier.pop()
+        # checking goal state
+        if problem.isGoalState(node):
+            return path
+        if node in explored:
+            continue
+        explored.append(node)  # adding node to the explored list
+        # visiting child node
+        successors = problem.getSuccessors(node)
+        for child in successors:
+            # storing each child state(node) and action(path)
+            child_node = child[0]
+            child_path = child[1]
+            if child_node not in explored:
+                # adding child nodes to frontier
+                child_path = path + [child_path]
+                frontier.push((child_node, child_path))
+
     util.raiseNotDefined()
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    # initializing frontier as a Queue for bfs
+    frontier = util.Queue()
+
+    frontier.push((problem.getStartState(), []))
+    explored = []
+
+    # choosing a node from frontier
+    while not frontier.isEmpty():
+        (
+            node,
+            path,
+        ) = frontier.pop()
+        # checking goal state
+        if problem.isGoalState(node):
+            return path
+        if node in explored:
+            continue
+        explored.append(node)   # adding node to the explored list
+        # visiting child node
+        successors = problem.getSuccessors(node)
+        for child in successors:
+            # storing each child state(node) and action(path)
+            child_node = child[0]
+            child_path = child[1]
+            if child_node not in explored:
+                # adding child nodes to frontier
+                child_path = path + [child_path]
+                frontier.push((child_node, child_path))
+
     util.raiseNotDefined()
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    # initializing frontier as a Priority Queue for ufs
+    frontier = util.PriorityQueue()
+
+    frontier.push((problem.getStartState(), [], 0), 0)
+    explored = []
+
+    # choosing a node from frontier
+    while not frontier.isEmpty():
+        (node, path, cost) = frontier.pop()
+        # checking goal state
+        if problem.isGoalState(node):
+            return path
+        if node in explored:
+            continue
+        explored.append(node)   # adding node to the explored list
+        # visiting child node
+        successors = problem.getSuccessors(node)
+        for child in successors:
+            # storing each child state, action and cost; cumulatively
+            child_node = child[0]
+            child_path = child[1]
+            child_cost = child[2]
+            if child_node not in explored:
+                # adding child nodes to frontier
+                child_path = path + [child_path]
+                child_cost = cost + child_cost
+                frontier.push((child_node, child_path, child_cost), child_cost)
+
     util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -106,9 +197,39 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
+
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    # initializing frontier as a Priority Queue for astar
+    frontier = util.PriorityQueue()
+
+    frontier.push((problem.getStartState(), [], 0), 0)
+    explored = []
+
+    # choosing a node from frontier
+    while not frontier.isEmpty():
+        (node, path, cost) = frontier.pop()
+        # checking goal state
+        if problem.isGoalState(node):
+            return path
+        if node in explored:
+            continue
+        explored.append(node)   # adding node to the explored list
+        # visiting child node
+        successors = problem.getSuccessors(node)
+        for child in successors:
+            # storing each child state, action and cost; cumulatively
+            child_node = child[0]
+            child_path = child[1]
+            child_cost = child[2]
+            if child_node not in explored:
+                # adding child nodes to frontier
+                child_path = path + [child_path]
+                child_cost = cost + child_cost
+                frontier.push((child_node, child_path, child_cost),
+                              child_cost + heuristic(child_node, problem))
+
     util.raiseNotDefined()
 
 
