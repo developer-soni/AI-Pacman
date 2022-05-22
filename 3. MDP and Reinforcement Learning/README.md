@@ -1,4 +1,4 @@
-[Instructions Doc]()
+[Instructions Doc](/3.%20MDP%20and%20Reinforcement%20Learning/mdp_reinforcement_learning_documentation.pdf)
 
 * Value Iteration
 * Bridge Crossing Analysis
