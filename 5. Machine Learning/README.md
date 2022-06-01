@@ -1,4 +1,4 @@
-[Instructions Doc]()
+[Instructions Doc](/5.%20Machine%20Learning/machine_learning_documentation.pdf)
 
 * Perceptron
 * Neural Network Tips
